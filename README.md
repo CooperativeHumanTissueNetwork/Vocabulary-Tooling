@@ -1,4 +1,4 @@
-# CHTN Vocabular Scripts
+# CHTN Vocabulary Tools
 
 Build SQL, [JSON-LD], and other versions of the CHTN Vocabulary
 
@@ -15,7 +15,7 @@ $ npm run-script build
 
 ### Getting Started (Windows)
 
-This script uses [d3][] to parse the CSV version of the vocabulary, which in turn has dependencies that require Python and C++ to build. This will hopefully fixed in a future version. A few possible steps to fix errors with `npm install`:
+This script uses [d3][] to parse the CSV version of the vocabulary, which in turn has dependencies that require Python and C++ to build. This will hopefully be fixed in a future version. A few possible steps to fix errors with `npm install`:
 
 1. Install Python >= 2.5 and < 3.0. Make sure it's in your path.
 2. Install a Microsoft Windows SDK or Visual Studio 2008+
