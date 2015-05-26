@@ -51,28 +51,52 @@ number of dependencies; we'll also use it to generate images later.
 This will also require generating a new Diagnosis and Diagnosis Modifier ID,
 since the build in `D1234` ID is for the Diagnosis + Modifier combo. These
 ID's are generated sequentially, starting at D1 and DM1
+    
+    if not argv.m
+        diagnoses           = {} #Index of diagnoses
+        diagnosisModifiers  = {} #Index of diagnosis modifiers
+        vocabularyJson.forEach (row) ->
+            if not row["Diagnosis"] then return
+            # Split diagnosis and modifier
+            [diagnosis, modifier]     = row["Diagnosis"].split(" \\ ")
 
-    diagnoses           = {} #Index of diagnoses
-    diagnosisModifiers  = {} #Index of diagnosis modifiers
-    vocabularyJson.forEach (row) ->
-        if not row["Diagnosis"] then return
-        # Split diagnosis and modifier
-        [diagnosis, modifier]     = row["Diagnosis"].split(" \\ ")
+            # Save combined diagnosis and id
+            row["Combined Diagnosis"] = row["Diagnosis"]
+            row["Combined DX Id"]     = "C#{row["DX Id"]}"
 
-        # Save combined diagnosis and id
-        row["Combined Diagnosis"] = row["Diagnosis"]
-        row["Combined DX Id"]     = "C#{row["DX Id"]}"
+            # Index and save diagnosis and diagnosis ID
+            if not diagnoses[diagnosis] then diagnoses[diagnosis] = "D#{Object.keys(diagnoses).length+1}"
+            row["DX Id"]     = diagnoses[diagnosis]
+            row["Diagnosis"] = diagnosis
 
-        # Index and save diagnosis and diagnosis ID
-        if not diagnoses[diagnosis] then diagnoses[diagnosis] = "D#{Object.keys(diagnoses).length+1}"
-        row["DX Id"]     = diagnoses[diagnosis]
-        row["Diagnosis"] = diagnosis
+            # Index and save modifier and modifier ID
+            if not diagnosisModifiers[modifier] then diagnosisModifiers[modifier] = "DM#{Object.keys(diagnosisModifiers).length+1}"
+            row["DXM Id"]     = diagnosisModifiers[modifier]
+            row["Diagnosis Modifier"] = modifier or ""
 
-        # Index and save modifier and modifier ID
-        if not diagnosisModifiers[modifier] then diagnosisModifiers[modifier] = "DM#{Object.keys(diagnosisModifiers).length+1}"
-        row["DXM Id"]     = diagnosisModifiers[modifier]
-        row["Diagnosis Modifier"] = modifier or ""
 
+### 2-a) Generate any necessary Id's for Modifier 
+Each column is either an Id column (e.g. "Anatomic Site Id") or a Description
+column ("Anatomic Site"). This script assumes that Id columns have the name
+of their corresponding description with the suffix " Id". If no such column is
+found, the Id's are generated here.
+
+    if argv.m
+        _ = require "underscore"
+        keys = Object.keys vocabularyJson[0]
+        ids = keys.filter (key) -> key.match /Id/
+        descriptions = keys.filter (key) -> !key.match /Id/
+        descriptionsWithoutIds = descriptions.filter (description) -> ! _.contains ids, "#{description} Id"
+        
+        console.log "Generating Id's for #{descriptionsWithoutIds.join(", ")}"
+
+        indices = {}
+        slugify = (term) -> term.replace(/\W/g,"").toLowerCase()
+        vocabularyJson.forEach (row) ->
+            descriptionsWithoutIds.forEach (description) ->
+                if not indices[description] then indices[description] = {}
+                if not indices[description][row[description]] then indices[description][row[description]] = "#{slugify(description)}#{Object.keys(indices[description]).length+1}"
+                row[description + " Id"] = indices[description][row[description]]
 
 
 ### 2-b) Save the Parsed JSON
