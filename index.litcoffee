@@ -3,22 +3,33 @@
 Builds JSON, JSON-LD, and SQL representations of the CHTN Vocabulary from the tabular version.
 
 ## 0) Parse Command Line Arguments
+Parse the command line arguments using [yargs].
 
     argv = require "yargs"
+        .usage "Usage: npm run-script build -- -f <vocabulary file> [-m]"
         .alias "f", "file"
-        .alias "d", "directory"
+        .describe "f", "Vocabulary File to Process"
+        .demand "f"
+        .boolean "m"
+        .alias "m", "modifier"
+        .describe "m", "Vocabulary File is a Modifier Vocabulary"
+        .help "h"
+        .alias "h", "help"
         .argv
 
-    workingDirectory = argv.directory
-    tabularFileName  = argv.file
+    # Extract the directory and filename
+    path = require "path"
+    workingDirectory = path.resolve path.dirname argv.file #argv.directory
+    tabularFileName  = path.basename argv.file
 
+    # Extract the vocabulary name and create the filenames for the alternative representations.
     vocabularyName   = tabularFileName.split(".").slice(0,-1).join(".")
     jsonFileName     = "#{vocabularyName}.json"
     sqlFileName      = "#{vocabularyName}.sql"
     jsonldFileName   = "#{vocabularyName}.jsonld"
     ntriplesFileName = "#{vocabularyName}.nt"
 
-    console.log "Parsing file #{tabularFileName} in directory #{argv.d}."
+    console.log "Parsing file #{tabularFileName} in directory #{workingDirectory}"
     console.log "Generating #{jsonFileName}, #{sqlFileName}, #{jsonldFileName}, and #{ntriplesFileName}."
 
 ## 1) Read in the raw file.
@@ -105,3 +116,4 @@ The [JSON-LD][] representation is parsed from the JSON representation, then the
 [d3-csv]: https://github.com/mbostock/d3/wiki/CSV "d3.csv documentation"
 [JSON-LD]: http://json-ld.org/ "JSON-LD homepage"
 [N-Triples]: http://www.w3.org/TR/n-triples/ "N-Triples Recommendation"
+[yargs]: https://github.com/bcoe/yargs "yargs Documentation"
