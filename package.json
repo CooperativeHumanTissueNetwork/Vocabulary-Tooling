@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary"
+    "url": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary-Tooling"
   },
   "author": "CHTN Vocabulary Working Group",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary/issues"
+    "url": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary-Tooling/issues"
   },
-  "homepage": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary",
+  "homepage": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary-Tooling",
   "dependencies": {
     "coffee-script": "^1.9.1",
     "d3": "^3.5.5",
