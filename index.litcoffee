@@ -2,17 +2,30 @@
 
 Builds JSON, JSON-LD, and SQL representations of the CHTN Vocabulary from the tabular version.
 
-    tabularFileName  = "CHTN Vocab-Disease List.txt"
-    jsonFileName     = "CHTN Vocab-Disease List.json"
-    sqlFileName      = "CHTN Vocab-Disease List.sql"
-    jsonldFileName   = "CHTN Vocab-Disease List.jsonld"
-    ntriplesFileName = "CHTN Vocab-Disease List.nt"
+## 0) Parse Command Line Arguments
+
+    argv = require "yargs"
+        .alias "f", "file"
+        .alias "d", "directory"
+        .argv
+
+    workingDirectory = argv.directory
+    tabularFileName  = argv.file
+
+    vocabularyName   = tabularFileName.split(".").slice(0,-1).join(".")
+    jsonFileName     = "#{vocabularyName}.json"
+    sqlFileName      = "#{vocabularyName}.sql"
+    jsonldFileName   = "#{vocabularyName}.jsonld"
+    ntriplesFileName = "#{vocabularyName}.nt"
+
+    console.log "Parsing file #{tabularFileName} in directory #{argv.d}."
+    console.log "Generating #{jsonFileName}, #{sqlFileName}, #{jsonldFileName}, and #{ntriplesFileName}."
 
 ## 1) Read in the raw file.
 Read in the Tab-Separated version of the vocabulary using [readFileSync][].
 
     fs = require "fs"
-    vocabularyCsv = fs.readFileSync "../#{tabularFileName}", encoding: "utf8"
+    vocabularyCsv = fs.readFileSync "#{workingDirectory}/#{tabularFileName}", encoding: "utf8"
 
 ## 2) Parse JSON
 Parse a JSON representation of the vocabulary from the tab-separated version
@@ -55,7 +68,7 @@ ID's are generated sequentially, starting at D1 and DM1
 We'll save the stringified JSON, pretty-printed with a tab-width of 2.
     
     jsonString = JSON.stringify vocabularyJson, null, 2
-    fs.writeFile "../#{jsonFileName}", jsonString, (err) ->
+    fs.writeFile "#{workingDirectory}/#{jsonFileName}", jsonString, (err) ->
         if err then throw err else console.log "Saved #{jsonFileName}"
 
 ## 3) Parse SQL
@@ -64,7 +77,7 @@ The SQL representation is parsed from the JSON representation.
     jsonToSql = require "./parsers/jsonToSql"
     jsonToSql vocabularyJson, (err, vocabularySql) ->
         if err then throw err
-        fs.writeFile "../#{sqlFileName}", vocabularySql, (err) ->
+        fs.writeFile "#{workingDirectory}/#{sqlFileName}", vocabularySql, (err) ->
             if err then throw err else console.log "Saved #{sqlFileName}"
 
 ## 4) Parse JSON-LD and N-Triples
@@ -77,13 +90,13 @@ The [JSON-LD][] representation is parsed from the JSON representation, then the
         if err then throw err
 
         jsonldString = JSON.stringify vocabularyJsonld, null, 2
-        fs.writeFile "../#{jsonldFileName}", jsonldString, (err) ->
+        fs.writeFile "#{workingDirectory}/#{jsonldFileName}", jsonldString, (err) ->
             if err then throw err else console.log "Saved #{jsonldFileName}"
 
         jsonld.normalize vocabularyJsonld, format: "application/nquads", (err, result) ->
             if err then throw err
             vocabularyNTriples = result
-            fs.writeFile "../#{ntriplesFileName}", vocabularyNTriples, (err) ->
+            fs.writeFile "#{workingDirectory}/#{ntriplesFileName}", vocabularyNTriples, (err) ->
                 if err then throw err else console.log "Saved #{ntriplesFileName}"
 
 
