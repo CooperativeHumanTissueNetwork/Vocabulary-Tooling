@@ -109,7 +109,7 @@ We'll save the stringified JSON, pretty-printed with a tab-width of 2.
 ## 3) Parse SQL
 The SQL representation is parsed from the JSON representation.
 
-    jsonToSql = require "./parsers/jsonToSql"
+    if argv.m then jsonToSql = require "./parsers/jsonToModifierSql" else jsonToSql = require "./parsers/jsonToSql"
     jsonToSql vocabularyJson, (err, vocabularySql) ->
         if err then throw err
         fs.writeFile "#{workingDirectory}/#{sqlFileName}", vocabularySql, (err) ->
