@@ -1,0 +1,38 @@
+{
+  "site": {
+    "id": "AS Id",
+    "modifier_id": "Anatomic Site Id",
+    "description": "Anatomic Site",
+    "type": "Site"
+  },
+  "subsite": {
+    "id": "SubS Id",
+    "modifier_id": "Subsite Id",
+    "description": "Subsite",
+    "type": "Subsite"
+  },
+  "category": {
+    "id": "Cat Id",
+    "modifier_id": "Category Id",
+    "description": "Category",
+    "type": "Category"
+  },
+  "diagnosis": {
+    "id": "DX Id",
+    "modifier_id": "Diagnosis Id",
+    "description": "Diagnosis",
+    "type": "Diagnosis"
+  },
+  "diagnosisModifer": {
+    "id": "DXM Id",
+    "modifier_id": "Diagnosis Modifier Id",
+    "type": "DiagnosisModifier",
+    "description": "Diagnosis Modifier"
+  },
+  "combinedDiagnosis": {
+    "id": "Combined DX Id",           
+    "type": "CombinedDiagnosis",
+    "modifier_id": "Combined Diagnosis Id",
+    "description": "Combined Diagnosis"
+  }
+}

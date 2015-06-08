@@ -1,6 +1,6 @@
 {
-  "name": "chtn-vocabulary",
-  "version": "1.0.0",
+  "name": "chtn-vocabulary-tools",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,9 @@
   "dependencies": {
     "coffee-script": "^1.9.1",
     "d3": "^3.5.5",
+    "i": "^0.3.3",
     "jsonld": "^0.3.22",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "yargs": "^3.9.1"
   }
 }
