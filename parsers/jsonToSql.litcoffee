@@ -4,7 +4,8 @@ Parses the JSON representation of the CHTN Vocabulary to SQL.
 
 # 0) Setup
 
-    schemaFile  = "static/chtnVocabularySchema.sql" # location relative to where the process is run
+    schemaFile  = "#{__dirname}/../static/chtnVocabularySchema.sql" #
+    #schemaFile  = "static/chtnVocabularySchema.sql" # location relative to where the process is run
     packageInfo = require "../package.json"         # location relative to where this file lives
 
     module.exports = (vocabularyJson, callback) ->
