@@ -119,20 +119,21 @@ The SQL representation is parsed from the JSON representation.
 The [JSON-LD][] representation is parsed from the JSON representation, then the 
 [N-Triples][] representation is parsed from the [JSON-LD][] representation.
 
-    jsonToJsonld = require "./parsers/jsonToJsonld"
-    jsonld = require "jsonld"
-    jsonToJsonld vocabularyJson, (err, vocabularyJsonld) ->
-        if err then throw err
-
-        jsonldString = JSON.stringify vocabularyJsonld, null, 2
-        fs.writeFile "#{workingDirectory}/#{jsonldFileName}", jsonldString, (err) ->
-            if err then throw err else console.log "Saved #{jsonldFileName}"
-
-        jsonld.normalize vocabularyJsonld, format: "application/nquads", (err, result) ->
+    if not argv.m
+        jsonToJsonld = require "./parsers/jsonToJsonld"
+        jsonld = require "jsonld"
+        jsonToJsonld vocabularyJson, (err, vocabularyJsonld) ->
             if err then throw err
-            vocabularyNTriples = result
-            fs.writeFile "#{workingDirectory}/#{ntriplesFileName}", vocabularyNTriples, (err) ->
-                if err then throw err else console.log "Saved #{ntriplesFileName}"
+
+            jsonldString = JSON.stringify vocabularyJsonld, null, 2
+            fs.writeFile "#{workingDirectory}/#{jsonldFileName}", jsonldString, (err) ->
+                if err then throw err else console.log "Saved #{jsonldFileName}"
+
+            jsonld.normalize vocabularyJsonld, format: "application/nquads", (err, result) ->
+                if err then throw err
+                vocabularyNTriples = result
+                fs.writeFile "#{workingDirectory}/#{ntriplesFileName}", vocabularyNTriples, (err) ->
+                    if err then throw err else console.log "Saved #{ntriplesFileName}"
 
 
 [readFileSync]: http://nodejs.org/api/fs.html#fs_fs_readfilesync_filename_options "fs.readFileSync documentation"
