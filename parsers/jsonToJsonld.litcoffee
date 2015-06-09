@@ -23,31 +23,7 @@ define the `chtn` prefix.
 # 1) Helper Functions
 We'll use the following keys to pull the data out of the rows.
 
-        keys =
-          site:
-            id: 'AS Id'
-            description: 'Anatomic Site'
-            type: 'Site'
-          subsite:
-            id: 'SubS Id'
-            description: 'Subsite'
-            type: 'Subsite'
-          category:
-            id: 'Cat Id'
-            description: 'Category'
-            type: 'Category'
-          diagnosis:
-            id: 'DX Id'
-            description: 'Diagnosis'
-            type: 'Diagnosis'
-          diagnosisModifer:
-            id: 'DXM Id'
-            type: 'DiagnosisModifier'
-            description: 'Diagnosis Modifier'
-          combinedDiagnosis:
-            id: "Combined DX Id"            
-            type: "CombinedDiagnosis"
-            description: "Combined Diagnosis"
+        keys = require "../static/chtnVocabularyEntities.json"
 
 ## 1-a) createRowEntity
 `createRowEntity` creates an entity (site, subsite, category, or diagnosis)
@@ -55,9 +31,9 @@ given a `row` and a `type`.
 
         createRowEntity = (row, type) ->
             entity = null
-            if row[keys[type].id]
+            if row[keys[type].modifier_id]
                 entity =
-                    "@id": "chtn:#{row[keys[type].id]}"
+                    "@id": "chtn:#{row[keys[type].modifier_id]}"
                     "description": row[keys[type].description]
                     "@type": "chtn:#{keys[type].type}"
             return entity
