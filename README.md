@@ -43,7 +43,7 @@ deploy:
 ```
 ## History
 
-See CHANGELOG.md
+See [CHANGELOG.md](CHANGELOG.md).
 
 [JSON-LD]: http://json-ld.org/ "JSON-LD Homepage"
 [Vocabulary]: https://github.com/CooperativeHumanTissueNetwork/Vocabulary "CHTN Vocabulary Repo"
