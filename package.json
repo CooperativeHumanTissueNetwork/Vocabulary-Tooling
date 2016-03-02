@@ -18,11 +18,12 @@
   },
   "homepage": "https://github.com/CooperativeHumanTissueNetwork/Vocabulary-Tooling",
   "dependencies": {
+    "babyparse": "^0.4.3",
     "coffee-script": "^1.9.1",
-    "d3": "^3.5.5",
     "i": "^0.3.3",
-    "jsonld": "^0.3.22",
+    "jsonld": "^0.4.5",
     "underscore": "^1.7.0",
     "yargs": "^3.9.1"
-  }
+  },
+  "engines": { "node": ">=4.2.4"}
 }

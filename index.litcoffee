@@ -40,15 +40,16 @@ Read in the Tab-Separated version of the vocabulary using [readFileSync][].
 
 ## 2) Parse JSON
 Parse a JSON representation of the vocabulary from the tab-separated version
-using [d3's][d3] built-in [CSV parser][d3-csv]. We use [d3][] to reduce the 
+using [d3's][d3] built-in [CSV parser][d3-csv]. We use [d3][] to reduce the
 number of dependencies; we'll also use it to generate images later.
 
-    d3 = require "d3"
-    vocabularyJson = d3.tsv.parse vocabularyCsv
+    Baby = require "babyparse"
+    parseResults = Baby.parse vocabularyCsv, { header: true, delimiter: "\t" }
+    vocabularyJson = parseResults.data
     console.log "Parsed #{tabularFileName} in to #{vocabularyJson.length} rows."
 
 
-### 2-a) Generate any necessary Id's for Modifier 
+### 2-a) Generate any necessary Id's for Modifier
 Each column is either an Id column (e.g. "Anatomic Site Id") or a Description
 column ("Anatomic Site"). This script assumes that Id columns have the name
 of their corresponding description with the suffix " Id". If no such column is
@@ -60,7 +61,7 @@ found, the Id's are generated here.
         ids = keys.filter (key) -> key.match /Id/
         descriptions = keys.filter (key) -> !key.match /Id/
         descriptionsWithoutIds = descriptions.filter (description) -> ! _.contains ids, "#{description} Id"
-        
+
         console.log "Generating Id's for #{descriptionsWithoutIds.join(", ")}"
 
         indices = {}
@@ -74,7 +75,7 @@ found, the Id's are generated here.
 
 ### 2-b) Save the Parsed JSON
 We'll save the stringified JSON, pretty-printed with a tab-width of 2.
-    
+
     jsonString = JSON.stringify vocabularyJson, null, 2
     fs.writeFile "#{workingDirectory}/#{jsonFileName}", jsonString, (err) ->
         if err then throw err else console.log "Saved #{jsonFileName}"
@@ -89,7 +90,7 @@ The SQL representation is parsed from the JSON representation.
             if err then throw err else console.log "Saved #{sqlFileName}"
 
 ## 4) Parse JSON-LD and N-Triples
-The [JSON-LD][] representation is parsed from the JSON representation, then the 
+The [JSON-LD][] representation is parsed from the JSON representation, then the
 [N-Triples][] representation is parsed from the [JSON-LD][] representation.
 
     if not argv.m
